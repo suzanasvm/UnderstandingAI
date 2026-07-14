@@ -287,11 +287,11 @@ def botoes_navegacao(pode_avancar=True, aviso=""):
     c1, _, c3 = st.columns([1, 4, 1])
     with c1:
         if st.session_state.etapa > 0:
-            st.button("⬅️ Voltar", on_click=ir_para, args=(st.session_state.etapa - 1,), use_container_width=True)
+            st.button("⬅️ Voltar", on_click=ir_para, args=(st.session_state.etapa - 1,), width='stretch')
     with c3:
         if st.session_state.etapa < len(ETAPAS) - 1:
             st.button("Avançar ➡️", on_click=ir_para, args=(st.session_state.etapa + 1,),
-                      disabled=not pode_avancar, use_container_width=True, type="primary")
+                      disabled=not pode_avancar, width='stretch', type="primary")
     if not pode_avancar and aviso:
         st.warning(aviso)
 
@@ -520,7 +520,7 @@ elif etapa == 1:
                "similaridade entre os registros. E não há coluna de rótulo: aqui ninguém dá a resposta!")
 
     st.write("")
-    st.dataframe(DADOS, use_container_width=True, hide_index=True, height=300)
+    st.dataframe(DADOS, width='stretch', hide_index=True, height=300)
 
     c1, c2 = st.columns([1, 1.3])
     with c1:
@@ -540,7 +540,7 @@ elif etapa == 1:
     with c2:
         fig = grafico_dispersao(DADOS, eixo_x, eixo_y, NOMES,
                                 titulo="Cada ponto é uma pessoa. Todas da mesma cor: ainda não há grupos!")
-        st.pyplot(fig, use_container_width=True)
+        st.pyplot(fig, width='stretch')
         plt.close(fig)
 
     explica(
@@ -616,9 +616,9 @@ elif etapa == 3:
 
     c1, c2 = st.columns([1, 1])
     with c1:
-        rodar = st.button(f"🚀 Rodar o K-Means com K = {st.session_state.k}", type="primary", use_container_width=True)
+        rodar = st.button(f"🚀 Rodar o K-Means com K = {st.session_state.k}", type="primary", width='stretch')
     with c2:
-        if st.button("🎲 Sortear novas posições iniciais", use_container_width=True):
+        if st.button("🎲 Sortear novas posições iniciais", width='stretch'):
             st.session_state.semente += 1
             st.session_state.executado = False
             st.info("Novas posições sorteadas! Rode o algoritmo de novo e compare o caminho dos centróides.")
@@ -642,7 +642,7 @@ elif etapa == 3:
                     grupos=quadro["grupos"], centroides=quadro["centroides"],
                     titulo=f"Rodada {i + 1} de {len(historico)}",
                 )
-                st.pyplot(fig, use_container_width=True)
+                st.pyplot(fig, width='stretch')
                 plt.close(fig)
             time.sleep(1.3)
 
@@ -689,13 +689,13 @@ elif etapa == 4:
             fig = grafico_dispersao(DADOS, eixo_x, eixo_y, NOMES,
                                     grupos=grupos, centroides=centroides,
                                     titulo="Resultado final do agrupamento")
-            st.pyplot(fig, use_container_width=True)
+            st.pyplot(fig, width='stretch')
             plt.close(fig)
         with c2:
             st.subheader("Posição dos centróides")
             tabela_c = pd.DataFrame(centroides, columns=[eixo_x, eixo_y]).round(1)
             tabela_c.insert(0, "Grupo", [f"Grupo {j + 1}" for j in range(len(centroides))])
-            st.dataframe(tabela_c, use_container_width=True, hide_index=True)
+            st.dataframe(tabela_c, width='stretch', hide_index=True)
             explica(
                 "Leia assim: o centróide do Grupo 1 representa o membro 'médio' daquele grupo. "
                 "Comparar os centróides é a forma mais rápida de entender o que diferencia cada perfil."
@@ -704,12 +704,12 @@ elif etapa == 4:
         st.subheader("Quem ficou em cada grupo?")
         atribuicao = DADOS.copy()
         atribuicao["Grupo"] = [f"Grupo {g + 1}" for g in grupos]
-        st.dataframe(atribuicao, use_container_width=True, hide_index=True, height=300)
+        st.dataframe(atribuicao, width='stretch', hide_index=True, height=300)
 
         st.subheader("Retrato falado de cada grupo")
         medias = atribuicao.groupby("Grupo")[FEATURES_DISPONIVEIS].mean().round(1)
         medias["Quantidade"] = atribuicao.groupby("Grupo").size()
-        st.dataframe(medias, use_container_width=True)
+        st.dataframe(medias, width='stretch')
         explica(
             "💬 <b>Agora vem a parte humana do trabalho:</b> o algoritmo entrega os grupos, mas quem dá "
             "significado a eles somos nós. Olhe as médias acima e tente batizar cada grupo. Nos dados "
@@ -770,7 +770,7 @@ elif etapa == 5:
                                     grupos=grupos, centroides=centroides,
                                     ponto_novo=(valores[eixo_x], valores[eixo_y]),
                                     titulo="A estrela é o seu ponto. Em qual grupo ela cai?")
-            st.pyplot(fig, use_container_width=True)
+            st.pyplot(fig, width='stretch')
             plt.close(fig)
 
         st.divider()

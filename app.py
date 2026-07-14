@@ -36,9 +36,19 @@ st.markdown(
 
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
-    h1, h2, h3 { font-family: 'Fraunces', serif !important; color: #1d3b4a; }
+    h1, h2, h3 { font-family: 'Fraunces', serif !important; color: #1d3b4a !important; }
 
-    .stApp { background: linear-gradient(180deg, #f6fbfc 0%, #eef5f7 100%); }
+    p { color: #3f5b66 !important; }
+    
+    [data-testid="stSidebarContent"] :is(h1, h2, h3, p) { color: #ffffff !important; }
+
+    [data-testid="stBaseButton-primary"] :is(h1, h2, h3, p) { color: #ffffff !important; }
+
+    [data-testid="stBaseButton-secondary"] :is(h1, h2, h3, p) { color: #ffffff !important; }
+
+    .stApp { background: linear-gradient(180deg, #f6fbfc 0%, #eef5f7 100%) !important; }
+
+    .stCheckbox label p { color: #000000 !important; }
 
     .cartao {
         background: #ffffff;
@@ -219,7 +229,7 @@ def botoes_navegacao(pode_avancar=True, aviso=""):
     c1, c2, c3 = st.columns([1, 4, 1])
     with c1:
         if st.session_state.etapa > 0:
-            st.button("⬅️ Voltar", on_click=ir_para, args=(st.session_state.etapa - 1,), use_container_width=True)
+            st.button("⬅️ Voltar", on_click=ir_para, args=(st.session_state.etapa - 1,), width='stretch')
     with c3:
         if st.session_state.etapa < len(ETAPAS) - 1:
             st.button(
@@ -227,7 +237,7 @@ def botoes_navegacao(pode_avancar=True, aviso=""):
                 on_click=ir_para,
                 args=(st.session_state.etapa + 1,),
                 disabled=not pode_avancar,
-                use_container_width=True,
+                width='stretch',
                 type="primary",
             )
     if not pode_avancar and aviso:
@@ -292,7 +302,7 @@ def desenhar_arvore(modelo, features, titulo="Árvore de Decisão"):
         ax=ax,
     )
     ax.set_title(titulo, fontsize=13, color="#1d3b4a")
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(fig, width='stretch')
     plt.close(fig)
 
 
@@ -361,7 +371,7 @@ Depois de baixar o arquivo, envie-o utilizando o campo abaixo.
     if st.session_state.origem != ARQUIVO_CSV_PADRAO.name:
         st.divider()
 
-        if st.button("↩️ Voltar ao CSV original", use_container_width=True):
+        if st.button("↩️ Voltar ao CSV original", width='stretch'):
             trocar_dados(carregar_csv_padrao(), ARQUIVO_CSV_PADRAO.name)
             st.rerun()
 # ----------------------------------------------------------------------------
@@ -461,7 +471,7 @@ elif etapa == 1:
             return ["background-color: #fdf3d7; color:#8a6a08; font-weight:600"] * len(coluna)
         return ["color:#8aa0aa"] * len(coluna)
 
-    st.dataframe(DADOS.style.apply(pintar, axis=0), use_container_width=True, hide_index=True)
+    st.dataframe(DADOS.style.apply(pintar, axis=0), width='stretch', hide_index=True)
     st.caption("Azul: features selecionadas | Amarelo: label | Cinza: colunas ignoradas pelo modelo")
 
     c1, c2 = st.columns([1.2, 1])
@@ -497,7 +507,7 @@ elif etapa == 1:
             ax.legend()
             ax.grid(alpha=.25)
             fig.patch.set_facecolor("#ffffff")
-            st.pyplot(fig, use_container_width=True)
+            st.pyplot(fig, width='stretch')
             plt.close(fig)
             explica("Repare: cada cor é uma categoria do label. Quando as cores formam <b>grupos separados</b> no gráfico, existe um padrão claro para o modelo descobrir!")
         else:
@@ -523,7 +533,7 @@ elif etapa == 2:
         pct = st.slider("Porcentagem dos dados usada para TREINO", 50, 90, st.session_state.pct_treino, step=10,
                         help="O restante vai para o grupo de teste.")
     with c2:
-        if st.button("🎲 Sortear novamente", use_container_width=True):
+        if st.button("🎲 Sortear novamente", width='stretch'):
             st.session_state.semente += 1
             st.session_state.treinado = False
 
@@ -573,7 +583,7 @@ elif etapa == 3:
                              help="Árvores mais profundas fazem mais perguntas e criam regras mais detalhadas.")
 
     st.write("")
-    if st.button("🚀 Treinar o modelo agora!", type="primary", use_container_width=True):
+    if st.button("🚀 Treinar o modelo agora!", type="primary", width='stretch'):
         X_tr, X_te, y_tr, y_te, nomes_tr, nomes_te = dividir_dados()
         area = st.empty()
         status = st.empty()
@@ -609,7 +619,7 @@ elif etapa == 3:
         imp.plot.barh(ax=ax, color="#2b8fa3")
         ax.set_xlabel("Importância no modelo")
         fig.patch.set_facecolor("#ffffff")
-        st.pyplot(fig, use_container_width=True)
+        st.pyplot(fig, width='stretch')
         plt.close(fig)
 
     botoes_navegacao(pode_avancar=st.session_state.treinado,
@@ -646,7 +656,7 @@ elif etapa == 4:
 
         c1, c2 = st.columns([2, 1])
         with c1:
-            st.dataframe(resultado, use_container_width=True, hide_index=True)
+            st.dataframe(resultado, width='stretch', hide_index=True)
         with c2:
             st.metric("🎯 Acurácia no teste", f"{acuracia:.0%}",
                       help="Porcentagem de previsões corretas nos alunos que o modelo nunca viu.")
